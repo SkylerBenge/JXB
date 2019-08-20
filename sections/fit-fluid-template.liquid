@@ -1,0 +1,95 @@
+<div class="ff-page">
+  <div class="Container">
+    <header class="PageHeader">
+      <div class="SectionHeader SectionHeader--center">
+        <h1 class="SectionHeader__Heading Heading u-h1">{{ page.title }}</h1>
+      </div>
+    </header>
+
+    <div class="TextCenter PageContent Rte">
+      {{ page.content }}
+    </div>
+  </div>
+
+  {%- for block in section.blocks -%}
+    {%- assign mod = forloop.index | modulo: 2 -%}
+    {%- capture image_component -%}
+      {%- if block.settings.image != lank -%}
+        <div class="ff-item ff-item--image">
+          <img src="{{ block.settings.image | img_url: '1007x' }}" alt="{{ block.settings.image.alt }}">
+        </div>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- capture text_component -%}
+      <div class="ff-item ff-item--body">
+        <div class="Rte">
+          {%- if block.settings.title != blank -%}
+            <h1>{{ block.settings.title }}</h1>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            {{ block.settings.text }}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endcapture -%}
+    <div class="ff-container">
+      <div class="ff-row">
+        {%- if block.settings.image_position == 'left' -%}
+          {{ image_component }}
+        {%- endif -%}
+        {{ text_component }}
+        {%- if block.settings.image_position == 'right' -%}
+          {{ image_component }}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+  {
+    "name": "Fit fluid page",
+    "class": "shopify-section--bordered",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "item",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "radio",
+            "label": "Image position",
+            "id": "image_position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "1007x"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,109 @@
+<section data-section-id="{{ section.id }}" data-section-type="hero-video" data-section-settings='{{ section_settings }}'>
+  <div>
+    {% if section.settings.video_url != blank and section.settings.video_type == 'mp4' %}
+      <div class="video-container" style="overflow:hidden;">
+        <div class="video-overlay js-video-overlay ImageHero__Image Image--lazyLoad Image--zoomOut"
+             data-optimumx="1.4"
+             data-expand="-150"
+             style="background-image:url('{{ section.settings.video_placeholder | img_url: '2400x' }}');">
+          <div class="video-text-wrapper video-text-wrapper--{{ section.settings.text_color }}">
+            <div class="SectionHeader">
+              {% if section.settings.subheading != blank %}
+                <h3 class="SectionHeader__SubHeading Heading u-h6">{{ section.settings.subheading }}</h3>
+              {% endif %}
+              {% if section.settings.title != blank %}
+                <h2 class="SectionHeader__Heading Heading u-h1">{{ section.settings.title }}</h2>
+              {% endif %}
+              <button class="js-video-play video-play Video__PlayButton" data-video="{{ section.id }}">
+                {% include 'icon' with 'play' %}
+              </button>
+            </div>
+          </div>
+        </div>
+        <video playsinline controls preload="auto" class="js-video" id="{{ section.id }}">
+          <source src="{{ section.settings.video_url }}" type="video/mp4">
+        </video>
+      </div>
+    {% endif %}
+
+    {% if section.settings.video_iframe != blank and section.settings.video_type == 'iframe' %}
+      <div class="video-iframe-container">{{ section.settings.video_iframe }}</div>
+    {% endif %}
+  </div>
+<section>
+
+{% schema %}
+  {
+    "name": "Hero video",
+    "class": "shopify-section--bordered",
+    "settings": [
+      {
+        "type": "radio",
+        "id": "text_color",
+        "label": "Text color",
+        "options": [
+          {
+            "value": "black",
+            "label": "Black"
+          },
+          {
+            "value": "white",
+            "label": "White"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Video"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "heading"
+      },
+      {
+        "type": "radio",
+        "id": "video_type",
+        "label": "Video type",
+        "options": [
+          {
+            "value": "mp4",
+            "label": "MP4"
+          },
+          {
+            "value": "iframe",
+            "label": "Iframe"
+          }
+        ]
+      },
+      {
+        "type": "html",
+        "id": "video_iframe",
+        "label": "Video iframe"
+      },
+      {
+        "type": "text",
+        "id": "video_url",
+        "label": "Video MP4 URL",
+        "info": "mp4"
+      },
+      {
+        "type": "image_picker",
+        "id": "video_placeholder",
+        "label": "Video placeholder"
+      }
+    ],
+    "presets": [
+      {
+        "category": "Video",
+        "name": "Hero video",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}

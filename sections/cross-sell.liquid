@@ -1,0 +1,85 @@
+{%- if section.settings.show_section %}
+  <section class="Section Section--spacingNormal SectionSpacing--top">
+    {% include 'nosto-element' with 'productpage-nosto-1' %}
+  </section>
+
+  {% comment %}
+  {%- assign cross_collection_handle = nil -%}
+
+  {%- for tag in product.tags -%}
+    {%- assign model = tag | downcase | split: '_' -%}
+    {%- if model[0] == 'cross' -%}
+      {%- assign cross_collection_handle = model | last | handleize -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign cross_collection = collections[cross_collection_handle] -%}
+
+  {%- unless cross_collection -%}
+    {%- assign cross_collection = product.collections.first | default: collections.all -%}
+  {%- endunless -%}
+
+  {%- if cross_collection.products_count == 1 -%}
+    {%- assign cross_collection = collections.all -%}
+  {%- endif -%}
+
+  {%- assign index = 0 -%}
+  {%- if cross_collection.products.size >= 3 -%}
+    {%- assign random_factor = cross_collection.products.size | minus: 2 | abs -%}
+    {%- capture index -%}{{ 'now' | date: '%S' | times: random_factor | divided_by: 60 }}{%- endcapture -%}
+  {%- endif -%}
+
+  {%- assign product_count = 0 -%}
+  {%- capture cross_items -%}
+    {%- for c_product in cross_collection.products offset: index limit: 3 -%}
+      {%- if c_product.id == product.id or product_count >= 2 -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      <div class="Grid__Cell 1/2--phone 1/2--tablet-and-up 1/2--desk">
+        {%- include 'product-item', show_product_info: true, show_color_swatch: false, show_labels: true, product: c_product -%}
+      </div>
+
+      {%- assign product_count = product_count | plus: 1 -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if product_count > 0 -%}
+    <section class="Section Section--spacingNormal SectionSpacing--top">
+      {%- if section.settings.title != blank -%}
+        <header class="SectionHeader SectionHeader--center">
+          <div class="Container">
+            <h3 class="SectionHeader__Heading Heading u-h3">{{ section.settings.title | escape }}</h3>
+          </div>
+        </header>
+      {%- endif -%}
+
+      <div class="ProductListWrapper ProductListWrapper--cross">
+        <div class="Crosssell-grid ProductList ProductList--grid Grid--quarter">
+          {{ cross_items }}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+  {% endcomment %}
+
+{%- endif -%}
+{% schema %}
+  {
+    "name": "Cross sell",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_section",
+        "label": "Show section",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Often Purchased With"
+      }
+    ]
+  }
+{% endschema %}

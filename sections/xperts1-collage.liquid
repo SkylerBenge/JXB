@@ -1,0 +1,188 @@
+<div class="quote-box"{% if section.settings.hide_module_collage %} style="display: none;"{% endif %}>
+	<p class="quotes">“</p>
+	<p class="quote">
+	{{ section.settings.quote_text }}
+	</p>
+	<p class="quotes">”</p>
+</div>
+
+{% assign mobile_image_1 = section.settings.collage_image_mobile_1 %}
+{% assign mobile_image_2 = section.settings.collage_image_mobile_2 %}
+{% assign mobile_image_3 = section.settings.collage_image_mobile_3 %}
+
+<div class="module-container"{% if section.settings.hide_module_collage %} style="display: none;"{% endif %}>
+	  <div class="first-block{% if section.settings.flip_sides %} flip{% endif %}">
+        {% if mobile_image_1 %}
+        <img class="first-image hidden-tablet-and-up" src="{{ section.settings.collage_image_mobile_1 | img_url: 'master' }}" />
+        {% endif %}
+	    <img class="first-image {% if mobile_image_1 %} hidden-phone{% endif %}" src="{{ section.settings.collage_image_1 | img_url: 'master' }}" />
+        {% if mobile_image_3 %}
+        <img class="third-image hidden-tablet-and-up" src="{{ section.settings.collage_image_mobile_3 | img_url: 'master' }}" />
+        {% endif %}
+	    <img class="third-image {% if mobile_image_3 %} hidden-phone{% endif %}" src="{{ section.settings.collage_image_3 | img_url: 'master' }}" />
+	  </div>
+	  <div class="second-block{% if section.settings.flip_sides %} flip{% endif %}">
+	    <div>{{ section.settings.collage_text }}</div>
+        {% if mobile_image_2 %}
+        <img class="second-image hidden-tablet-and-up" src="{{ section.settings.collage_image_mobile_2 | img_url: 'master' }}" />
+        {% endif %}
+	    <img class="second-image{% if mobile_image_2 %} hidden-phone{% endif %}" src="{{ section.settings.collage_image_2 | img_url: 'master' }}" />
+	  </div>
+</div>
+
+
+<style>
+	.module-container {
+	  display: flex;
+	  flex-wrap: wrap; 
+	}
+	.first-block {
+	  width: 60%;
+	}
+	.first-block.flip {
+		order: 2;
+	}
+	.second-block.flip {
+		order: 1;
+	}
+	.second-block {
+	  width: 40%;
+	}
+	h1 {
+		font-size: 34px;
+		font-family: "Cormorant Garamond", serif;
+	}
+	h2 {
+		font-size: 18px;
+	}
+	.quote {
+	  text-align: left;
+	  margin-top: 2.2vw;
+	  max-width: 50vw;
+	  margin-left: auto;
+	  margin-right: auto;
+	  font-size: 18px;
+	  text-transform: uppercase;
+	}
+	.quote {
+	  text-align: center;
+	}
+	.quote-box {
+	    padding: 0 6vw 0 0;
+	    margin-top: 5vw;
+	}
+	.quotes {
+	  font-family: 'Cormorant Garamond', serif;
+	  margin-top: 1.6vw;
+	  margin-bottom: -5vw;
+	  font-size: 7vw;
+	  text-align: center;
+	}
+
+	@media screen and ( min-width: 740px ) {
+		.first-image, .second-image {
+			width: 100%;
+		}
+		.third-image {
+			width: 50%;
+			{% if section.settings.flip_sides %} 
+			float: left;
+			{% else %}
+			float: right;
+			{% endif %}
+		}
+		.second-block {
+			padding-left: 2%;
+			padding-right: 5%;
+		}
+		.first-block img, .second-block img {
+			padding-top: 5vw;
+		}
+		.second-block div {
+			padding-top: 15vw;
+		    padding-left: 20%;
+		}
+	}
+	@media screen and ( max-width: 740px ) {
+		.about-container {
+			flex-direction: column;
+	  		align-items: flex-start; 
+		}
+	    .first-block, .second-block{
+			  width: 100% !important;
+		}
+		.first-block > div, .first-block > img, .second-block > div, .second-block > img {
+			padding: 20px 0;
+		}
+		.second-block {
+			order: 1;
+		}
+		.first-block {
+			order: 2;
+		}
+    	.first-block div, .second-block div {
+   			padding: 0 10%;
+    	}    			
+		.image-block {
+			margin-top: 0 !important;
+		}
+  	}
+</style>
+
+{% schema %}  
+{
+  "name": "Module page collage",
+  "settings": [
+    {
+      "type":"checkbox",
+      "id": "hide_module_collage",
+      "label": "Hide Module?"
+    },
+    {
+    	"type":"text",
+    	"id": "quote_text",
+    	"label": "quote"
+    },
+ 	{
+	  "type":"html",
+	  "id": "collage_text",
+	  "label": "Collage Text"
+	},    
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_1",
+	  "label": "Collage Image 1"
+	},   
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_mobile_1",
+	  "label": "Collage Image Mobile 1"
+	},    
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_2",
+	  "label": "Collage Image 2"
+	},   
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_mobile_2",
+	  "label": "Collage Image Mobile 2"
+	},    
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_3",
+	  "label": "Collage Image 3"
+	},   
+	{
+	  "type":"image_picker",
+	  "id": "collage_image_mobile_3",
+	  "label": "Collage Image Mobile 3"
+	},    
+	{
+	  "type":"checkbox",
+	  "id": "flip_sides",
+	  "label": "Flip Sides"
+	}	
+  ]
+}
+{% endschema %}

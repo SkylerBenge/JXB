@@ -1,0 +1,56 @@
+{% section 'product-template' %}
+{% comment %}
+{% section 'cross-sell' %}
+{% section 'related-products' %}
+{% endcomment %}
+{% section 'recently-viewed-products' %}
+
+
+
+<div class="Container">
+  <center><h3 class="Section__SubHeading Heading u-h6">Follow us</h3></center>
+  <center><h2 class="Section__Heading Heading u-h1">@brandjxb</h2> </center></div>
+
+<script src="//foursixty.com/media/scripts/fs.slider.v2.5.js" data-feed-id="jxb" data-theme="slider_v2_5" data-cell-size="20%"></script><style>.fs-has-links::after {  padding: 11px 16.5px; background-color: rgb(0, 0, 0); color: rgba(255, 255, 255, 0.85); content: "SHOP NOW";  }.fs-wrapper { height: auto } .fs-entry-container { height: 0 !important; width: 20% !important; padding-top: 20% !important; }.fs-wrapper div.fs-text-container .fs-entry-title, div.fs-detail-title{font-family:Lato,sans-serif;;font-style:italic;font-weight:normal;}div.fs-text-container .fs-entry-date, div.fs-detail-container .fs-post-info, div.fs-wrapper div.fs-has-links::after, .fs-text-product, .fs-overlink-text{font-family:Lato,sans-serif;;font-style:normal;font-weight:normal;}.fs-wrapper div.fs-text-container * {color:rgb(0, 0, 0)}.fs-wrapper div.fs-text-container {background-color:rgba(255, 255, 255, 0.85); margin: 0px}div.fs-entry-date{display:none}div.fs-entry-title{display:none}.fs-wrapper div.fs-timeline-entry{ margin: 5px }</style>
+
+    <div class="SectionFooter">
+      <a href="https://www.brandjxb.com/pages/shop-social" class="Button Button--primary" target="_blank" rel="noopener">JOIN OUR FEED</a>
+    </div>
+
+
+
+{% comment %}
+<script text="text/javascript">
+  var _learnq = _learnq || [];
+
+  var item = {
+    Name: {{ product.title|json }},
+    ProductID: {{ product.id|json }},
+    Categories: {{ product.collections|map:'title'|json }},
+    ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor|json }},
+    Price: {{ product.price|money|json }},
+    CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+  };
+
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+
+{% include 'nosto-element' with 'productpage-nosto-1' %}
+
+{% include 'nosto-element' with 'productpage-nosto-2' %}
+
+{% endcomment %}
