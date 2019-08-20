@@ -1,0 +1,161 @@
+<script>
+// (c) Copyright 2016 Caroline Schnapp. All Rights Reserved. Contact: mllegeorgesand@gmail.com
+// See https://docs.shopify.com/themes/customization/navigation/link-product-options-in-menus
+
+var Shopify = Shopify || {};
+Shopify.optionsMap = {};
+Shopify.availableOptions = []
+Shopify.linkOptionError = null
+
+Shopify.updateOptionsInSelector = function(selectorIndex) {
+  if (Shopify.linkOptionError) {
+    return null
+  }
+
+  switch (selectorIndex) {
+    case 0:
+      var key = 'root';
+      var selector = jQuery('.OptionSelector:eq(0) .Popover__ValueList');
+      break;
+    case 1:
+      var key = jQuery('.ProductForm__SelectedValue:eq(0)').text();
+      var selector = jQuery('.OptionSelector:eq(1) .Popover__ValueList');
+      break;
+    case 2:
+      var key = jQuery('.ProductForm__SelectedValue:eq(0)').text();
+      key += ' / ' + jQuery('.ProductForm__SelectedValue:eq(1)').text();
+      var selector = jQuery('.OptionSelector:eq(2) .Popover__ValueList');
+  }
+
+  var initialValue = selector.val();
+  selector.empty();
+  var availableOptions = Shopify.optionsMap[key] || [];
+
+  if (availableOptions.length) {
+    Shopify.availableOptions.push(availableOptions)
+  }
+
+  for (var i=0; i<availableOptions.length; i++) {
+    var option = availableOptions[i].replace('- SOLD OUT', '');
+    var newOption = jQuery('<button></button>')
+    newOption.attr('data-value', String(option))
+    newOption.attr('data-option-position', String(selectorIndex + 1))
+    newOption.attr('data-action', 'select-value')
+    newOption.attr('type', 'button')
+
+    if (availableOptions[i].indexOf('SOLD OUT') !== -1) {
+      newOption.attr('disabled', 'disabled')
+    }
+
+    newOption.addClass('Popover__Value Heading Link Link--primary u-h6')
+    newOption.text(option)
+    selector.append(newOption);
+  }
+
+  var ao = availableOptions.map(function (option) {
+    return option.replace('- SOLD OUT', '').trim()
+  })
+
+  jQuery('.swatch[data-option-index="' + selectorIndex + '"] .swatch-element').each(function() {
+    if (jQuery.inArray($(this).attr('data-value'), ao) !== -1) {
+
+      if (jQuery.inArray($(this).attr('data-value'), availableOptions) !== -1) {
+        $(this).removeClass('soldout').show().find(':radio').removeAttr('disabled','disabled').removeAttr('checked');
+      } else {
+        $(this).addClass('soldout').find(':radio').removeAttr('checked').attr('disabled','disabled');
+      }
+
+    }
+    else {
+      $(this).addClass('soldout').hide().find(':radio').removeAttr('checked').attr('disabled','disabled');
+    }
+  });
+  if (jQuery.inArray(initialValue, availableOptions) !== -1) {
+    selector.val(initialValue);
+  }
+
+  if (availableOptions.length) {
+    try {
+      var radio = jQuery('.swatch[data-option-index="' + selectorIndex + '"] .swatch-element').find('input:radio[value="' + initialValue + '"]')
+
+      if (radio.get(0)) {
+        radio.get(0).checked = true
+      }
+    } catch (e) {
+      console.error('ERROR:', e)
+      Shopify.linkOptionError = e
+    }
+  }
+
+  selector.trigger('change');
+};
+
+Shopify.linkOptionSelectors = function(product) {
+  Shopify.linkOptionError = null
+
+  // Building our mapping object.
+  for (var i=0; i<product.variants.length; i++) {
+    var variant = product.variants[i];
+
+    // Gathering values for the 1st drop-down.
+    var option1 = variant.available ? variant.option1 : variant.option1 + ' - SOLD OUT'
+    Shopify.optionsMap['root'] = Shopify.optionsMap['root'] || [];
+    Shopify.optionsMap['root'].push(option1);
+    Shopify.optionsMap['root'] = jQuery.unique(Shopify.optionsMap['root']);
+
+    // Gathering values for the 2nd drop-down.
+    if (product.options.length > 1) {
+      var option2 = variant.available ? variant.option2 : variant.option2 + ' - SOLD OUT'
+      var key = variant.option1;
+      Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+      Shopify.optionsMap[key].push(option2);
+      Shopify.optionsMap[key] = jQuery.unique(Shopify.optionsMap[key]);
+    }
+
+    // Gathering values for the 3rd drop-down.
+    if (product.options.length === 3) {
+      var option3 = variant.available ? variant.option3 : variant.option3 + ' - SOLD OUT'
+      var key = variant.option1 + ' / ' + variant.option2;
+      Shopify.optionsMap[key] = Shopify.optionsMap[key] || [];
+      Shopify.optionsMap[key].push(option3);
+      Shopify.optionsMap[key] = jQuery.unique(Shopify.optionsMap[key]);
+    }
+  }
+  // Update options right away.
+  Shopify.updateOptionsInSelector(0);
+  if (product.options.length > 1) Shopify.updateOptionsInSelector(1);
+  if (product.options.length === 3) Shopify.updateOptionsInSelector(2);
+  // When there is an update in the first dropdown.
+  jQuery(".OptionSelector:eq(0)").click(function() {
+    Shopify.updateOptionsInSelector(1);
+    if (product.options.length === 3) Shopify.updateOptionsInSelector(2);
+    return true;
+  });
+  // When there is an update in the second dropdown.
+  jQuery(".OptionSelector:eq(1)").click(function() {
+    if (product.options.length === 3) Shopify.updateOptionsInSelector(2);
+    return true;
+  });
+};
+
+{% if product.available and product.options.size > 1 %}
+  document.addEventListener('DOMContentLoaded', function () {
+    Shopify.linkOptionSelectors({{ product | json }});
+    var $addToCartForm = $('form[action="/cart/add"]');
+    if (window.MutationObserver && $addToCartForm.length) {
+      if (typeof observer === 'object' && typeof observer.disconnect === 'function') {
+        observer.disconnect();
+      }
+      var config = { childList: true, subtree: true };
+      var observer = new MutationObserver(function() {
+        Shopify.linkOptionError = null
+        Shopify.linkOptionSelectors({{ product | json }});
+
+        observer.disconnect();
+      });
+      observer.observe($addToCartForm[0], config);
+    }
+  });
+{% endif %}
+
+</script>

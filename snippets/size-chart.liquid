@@ -1,0 +1,32 @@
+{% comment %} SIZE CHART {% endcomment %}
+
+{% for _tag in product.tags %}
+  {% assign tag = _tag | downcase %}
+  {% if tag contains 'style' %}
+    {% assign audience = tag | remove: 'style_' %}
+
+    {% case audience %}
+      {% when 'tops' %}
+        {% assign size_chart_id = 'size-guide-tops' %}
+        {% break %}
+      {% when 'bottoms' %}
+        {% assign size_chart_id = 'size-guide-bottoms' %}
+        {% break %}
+    {% endcase %}
+  {% endif %}
+{% endfor %}
+
+{% assign target_size_chart = blank %}
+{% assign size_chart_content = pages[section.settings.size_chart_page].content | split: '<!-- split -->' %}
+{% for content in size_chart_content %}
+  {% if content contains size_chart_id %}
+    {% assign target_size_chart = content %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div id="size-chart--popup" class="product-page-popup" style="display: none">
+  <div class="Rte">
+    {{ target_size_chart }}
+  </div>
+</div>

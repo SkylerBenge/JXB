@@ -1,0 +1,43 @@
+{% assign image = settings.newsletter_popup_image %}
+{% assign heading = settings.newsletter_popup_heading %}
+{% assign body = settings.newsletter_popup_body %}
+
+<div id="modal-newsletter" class="newsletter-modal" style="display: none">
+  <div class="newsletter-modal__inner">
+    <div class="newsletter-modal__grid">
+
+      {% if image != blank %}
+        <div class="newsletter-modal__grid-item newsletter-modal__grid-item--left">
+          <img src="{{ image | img_url: '800x' }}" alt="{{ image.alt }}" class="newsletter-modal__image">
+        </div>
+      {% endif %}
+
+      <div class="newsletter-modal__grid-item newsletter-modal__grid-item--right{% if image == blank %} newsletter-modal__grid-item--full{% endif %}">
+        {% if heading != blank %}
+          <h1 class="newsletter-modal__heading">{{ heading }}</h1>
+        {% endif %}
+
+        {% if body != blank %}
+          <p class="newsletter-modal__body">{{ body }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+<script>
+    KlaviyoSubscribe.attachToForms('#email_signup', {
+      success: function ($form) {
+        $.fancybox.open({src: '#modal-newsletter', type: 'inline' })
+        $('#Subscribe').hide()
+      },
+      hide_form_on_success: true,
+      extra_properties: {
+        $source: '$embed',
+        $method_type: "Klaviyo Form",
+        $method_id: 'embed',
+        $consent_version: 'Embed default text'
+      }
+    });
+</script>

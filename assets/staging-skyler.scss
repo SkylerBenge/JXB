@@ -1,0 +1,65 @@
+/* Just In */
+@media screen and ( max-width: 740px ) {
+  .SectionHeader__TabList .TabList__Item {
+      width: auto !Important;
+      margin: 0 auto !Important;
+  }
+}
+@media screen and (min-width: 1008px) {
+  .FeaturedImage .FeaturedImage__Content {
+      position: inherit !important;
+      left: inherit !important;
+      top: inherit !important;
+      -webkit-transform: inherit !important;
+      transform: inherit !important;
+  }
+  .FeaturedImage .FeaturedImage__Content .SectionHeader {
+    margin-top: 60px;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* search */
+.Search {
+  height: 100px;
+  border: 1px solid #000;
+}
+/* Footer */
+.Footer__Block--newsletter .Footer .Heading {
+    font-family: "Cormorant Garamond",serif !Important;
+  font-size: 18px;
+}
+.Footer__Content.Rte {
+    max-width: 230px;
+    margin: 20px auto;
+/*     color: #9d9d9d; */
+}
+/* button#Subscribe::before {
+    background: #9d9d9d !Important;
+}
+.Footer__Social .Link>span {
+    color: #9d9d9d !Important;
+} */
+.Footer__Social .HorizontalList__Item {
+    margin: 0 7vw;
+}
+.Footer__Block--newsletter input::-webkit-input-placeholder {
+   text-align: center;
+}
+.Footer__Block--newsletter input:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+.Footer__Block--newsletter input::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+.Footer__Block--newsletter input:-ms-input-placeholder {  
+   text-align: center; 
+}
+/* Lookbook */
+.ProductItem__Info {
+  font-size: 14px;
+}
+.ProductItem__PriceList  {
+  margin-bottom: 20px;
+}
+

@@ -1,0 +1,232 @@
+$desk: 1240px;
+$phone: 641px;
+$lap: 1008px;
+
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function em($target, $ctx: 14px) {
+  @if $target == 0 {
+    @return 0;
+  }
+  @return $target / $ctx + 0em;
+}
+
+@mixin make-fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+      font-size: calc( #{em($min-font-size)} + (#{strip-unit(em($max-font-size - $min-font-size))}) * (100vw - #{em($min-vw)}) / (#{strip-unit(em($max-vw - $min-vw))}) );
+    }
+  }
+}
+
+.Footer__Content.Rte {
+  @media (min-width: $phone) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.FeaturedImage.Major.JXB .slick-initialized {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.Slideshow__Content--topLeft,
+.Slideshow__Content--topCenter,
+.Slideshow__Content--topRight {
+  @media (min-width: $desk) {
+    top: 16%;
+  }
+}
+
+.Slideshow__Content--middleCenter .SectionHeader {
+  @media (min-width: $desk) {
+    margin-bottom: 130px;
+  }
+}
+
+@media screen and (min-width: $lap) {
+  .Slideshow__Content {
+    padding: 0 24px;
+  }
+}
+
+.Slideshow__Content--topLeft,
+.Slideshow__Content--topRight {
+  text-align: center;
+
+  @media (min-width: $desk) {
+    max-width: em(500px);
+  }
+
+  .ButtonGroup {
+    justify-content: center;
+  }
+}
+
+.Slideshow__Content--topLeft {
+  @media (min-width: $desk) {
+    right: auto;
+    left: 0;
+  }
+}
+
+.Slideshow__Content--topRight {
+  @media (min-width: $desk) {
+    right: 0;
+    left: auto;
+  }
+}
+
+.Slideshow__Content .SectionHeader {
+  @media (max-width: $desk - 1) {
+    padding-top: 30px;
+  }
+}
+
+.Slideshow__Content {
+  @media (min-width: $desk) {
+    @include make-fluid-type($desk, 1600px, 14px, 18px);
+  }
+
+  @media (min-width: 1600px) {
+    font-size: em(18px);
+  }
+  
+  .SectionHeader__SubHeading {
+    font-size: em(18px);
+  }
+
+  .SectionHeader__Heading {
+    font-size: em(34px);
+  }
+
+  .Slideshow__Button {
+    font-size: em(14px);
+  }
+}
+
+.Carousel--insideDots .flickity-page-dots {
+  @media (max-width: $desk - 1) {
+    position: static;
+    margin-top: 22px;
+  }
+}
+
+.Slideshow__Button {
+  text-transform: uppercase;
+}
+
+.Product__Wrapper {
+  @media (max-width: $phone) {
+    font-size: 10px;
+  }  
+}
+
+.Product__Wrapper .breadcrumb {
+  @media (max-width: $phone) {
+    font-size: 14px;
+  }  
+}
+
+.ProductMeta {
+  @media (max-width: $lap - 1) {
+    text-align: left;
+  }
+}
+
+.ProductMeta__Title {
+  margin-top: 20px;
+
+  @media (max-width: $phone) {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+}
+
+.ProductMeta__PriceList .ProductMeta__Price {
+  @media (max-width: $phone) {
+    font-size: 12px;
+  }
+}
+
+.ProductMeta__Description {
+  @media (max-width: $phone) {
+    padding-top: 0;
+  }
+}
+
+.ProductItem__Title,
+.ProductItem__PriceList {
+  color: #000;
+}
+
+.Footer__Social .HorizontalList__Item {
+  margin: 0 6px;
+}
+
+.CartItem__Meta,
+.CartItem__Title {
+  font-size: 14px;
+}
+
+.ProductMeta__Title {
+  font-size: 30px;
+}
+
+.ff-page .Rte h1 {
+  margin-bottom: 0.5em;
+}
+
+@media screen and (min-width: $lap) {
+  .ff-page .Rte h1,
+  [data-section-type="instagram"] .Section__Heading,
+  .featured-collection--jxb .SectionHeader__TabList .TabList__Item {
+    font-size: 30px;
+    letter-spacing: .06em;
+  }
+
+  #shopify-section-xpert1-qa,
+  #shopify-section-xpert2-qa,
+  #shopify-section-xpert3-qa,
+  #shopify-section-xpert4-qa,
+  #shopify-section-xperts1-collage,
+  #shopify-section-xperts2-collage,
+  #shopify-section-xperts3-collage,
+  #shopify-section-xperts4-collage,
+  #shopify-section-about-template
+  .ff-page {
+    font-size: 16px;
+  }
+}
+
+.CartItem__Price {
+  font-family: 'Lato';
+}
+
+#collection-sort-popover {
+  position: absolute;
+  top: auto !important;
+  right: auto !important;
+  left: 50px;
+  z-index: 1;
+}
+
+.Footer__Content.Rte {
+  color: #000000;
+}
+
+.Footer__Social .Link > span {
+  color: #000000 !important;
+}
+
+button#Subscribe::before {
+  background: #000000 !important;
+}
